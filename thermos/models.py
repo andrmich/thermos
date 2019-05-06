@@ -3,7 +3,7 @@ from datetime import datetime
 from thermos.thermos import db
 
 
-class Bookmark(db.Model):
+class Bookmarks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -11,6 +11,7 @@ class Bookmark(db.Model):
 
     def __repr__(self):
         return "<Bookmark '{}: '{}'>".format(self.description, self.url)
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
