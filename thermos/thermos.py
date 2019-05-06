@@ -1,23 +1,32 @@
+import os
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 
-from forms import BookmarkForm
+from thermos.forms import BookmarkForm
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
-bookmarks = []
 app.config['SECRET_KEY'] = '9\x83\xc96NZ;\x88\xb9\xbc*\x83{\xc1\x8e7;\x16\x06p\xfc\x07\x9a\xc6'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'thermos.db')
+db = SQLAlchemy(app)
+
+bookmarks = []
 
 
 def store_bookmark(url, description):
     bookmarks.append(dict(
         url=url,
-        description =description,
+        description=description,
         user="reindert",
         date=datetime.utcnow()
     ))
 
+
 def new_bookmarks(num):
     return sorted(bookmarks, key=lambda bm: bm['date'], reverse=True)[:num]
+
 
 @app.route('/')
 @app.route('/index')
