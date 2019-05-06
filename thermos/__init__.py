@@ -1,4 +1,5 @@
 import os
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,5 +11,5 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'th
 app.config['DEBUG'] = True
 db = SQLAlchemy(app)
 
-import models
-import views
+import thermos.models
+import thermos.views
