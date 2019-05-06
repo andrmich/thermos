@@ -15,7 +15,7 @@ import models
 
 # Fake login
 def logged_in_user():
-    return models.User.query.fliter_by(username="bella").first()
+    return models.User.query.filter_by(username="bella").first()
 
 @app.route('/')
 @app.route('/index')
