@@ -3,7 +3,7 @@ from datetime import datetime
 from thermos.thermos import db
 
 
-class Bookmarks(db.Model):
+class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
