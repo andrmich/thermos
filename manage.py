@@ -1,9 +1,8 @@
 #! /home/aisim/.pyenv/versions/3.7.2/envs/flask_app/bin/python
 
 from thermos import app, db
+from thermos.models import User
 from flask_script import Manager, prompt_bool
-
-from models import User
 
 manager = Manager(app)
 
