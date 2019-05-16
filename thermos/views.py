@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import login_required, login_user, logout_user, current_user
 
 from thermos import app, db, login_manager
@@ -29,7 +29,21 @@ def add():
         db.session.commit()
         flash("Stored '{}'".format(description))
         return redirect(url_for('index'))
-    return render_template('add.html', form=form)
+    return render_template('bookmark_form.html', form=form)
+
+
+@app.route('/edit/<bookmark_id>', methods=["GET", "POST"])
+@login_required
+def edit_bookmark(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    if current_user != bookmark.user:
+        abort(403)
+    form = BookmarkForm(obj=bookmark)
+    if form.validate_on_submit():
+        form.populate_obj(bookmark)
+        db.session.commit()
+        flash(f'Stored "{bookmark.description}".')
+        return render_template('bookmark_form.html', form=form, title = "Edit bookmark.")
 
 
 @app.route('/user/<username>')
@@ -47,7 +61,7 @@ def login():
             login_user(user, form.remember_me.data)
             flash("Logged in successfully as {}.".format(user.username))
             return redirect(request.args.get('next') or url_for('user',
-                                                username=user.username))
+                                                                username=user.username))
         flash('Incorrect username or password.')
     return render_template("login.html", form=form)
 
@@ -64,7 +78,7 @@ def signup():
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
-                    password = form.password.data)
+                    password=form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('Welcome, {}! Please login.'.format(user.username))
@@ -80,3 +94,8 @@ def page_not_found(e):
 @app.errorhandler(500)
 def page_not_found(e):
     return render_template('500.html'), 500
+
+
+@app.errorhandler(403)
+def page_not_found(e):
+    return render_template('403.html'), 403

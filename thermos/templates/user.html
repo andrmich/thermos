@@ -1,25 +1,28 @@
 {% extends "base.html" %}
+{% from "form_macros.html" import render_field %}
 
 {% block title %}
-Thermos -- Bookmarks for user {{ user.username }}
+    Thermos -- {{ title }}
 {% endblock %}
 
 {% block content %}
-    <article>
-        <header>
-            <h1>Bookmarks for {{ user.username }}</h1>
+    <section>
+        <h1>{{ title }}</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <table>
+                {{ render_field(form.url, siez=50) }}
+                {{ render_field(form.description, siez=50) }}
 
-            <ul>
-                {% for bm in user.bookmarks %}
-                    <li>
-                        <a href="{{ bm.url }}">{{ bm.description }}</a>
-                        <span class="timestamp">Added at {{ bm.date }}</span>
-                    </li>
-                {% else %}
-                    <li>This user has not added any bookmarks yet.</li>
-                {% endfor %}
-            </ul>
-        </header>
+                <tr class="submit">
+                    <td></td>
+                    <td><button type="submit">Submit</button> </td>
 
-    </article>
+                </tr>
+            </table>
+        </form>
+    </section>
+{% endblock %}
+
+{% block sidebar %}
 {% endblock %}
