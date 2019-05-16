@@ -12,7 +12,7 @@ class Bookmark(db.Model):
     url = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     description = db.Column(db.String(300))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',), nullable=False)
 
     @staticmethod
     def newest(num):
