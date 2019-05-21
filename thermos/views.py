@@ -11,13 +11,13 @@ def load_user(userid):
     return User.query.get(int(userid))
 
 
-@app.route('/')
-@app.route('/index')
+@app.route("/")
+@app.route("/index")
 def index():
-    return render_template('index.html', new_bookmarks=Bookmark.newest(5))
+    return render_template("index.html", new_bookmarks=Bookmark.newest(5))
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route("/add", methods=["GET", "POST"])
 @login_required
 def add():
     form = BookmarkForm()
@@ -29,11 +29,11 @@ def add():
         db.session.add(bm)
         db.session.commit()
         flash("Stored '{}'".format(bm.description))
-        return redirect(url_for('index'))
-    return render_template('bookmark_form.html', form=form, title="Add a bookmark")
+        return redirect(url_for("index"))
+    return render_template("bookmark_form.html", form=form, title="Add a bookmark")
 
 
-@app.route('/edit/<int:bookmark_id>', methods=['GET', 'POST'])
+@app.route("/edit/<int:bookmark_id>", methods=["GET", "POST"])
 @login_required
 def edit_bookmark(bookmark_id):
     bookmark = Bookmark.query.get_or_404(bookmark_id)
@@ -44,11 +44,11 @@ def edit_bookmark(bookmark_id):
         form.populate_obj(bookmark)
         db.session.commit()
         flash("Stored '{}'".format(bookmark.description))
-        return redirect(url_for('user', username=current_user.username))
-    return render_template('bookmark_form.html', form=form, title="Edit bookmark")
+        return redirect(url_for("user", username=current_user.username))
+    return render_template("bookmark_form.html", form=form, title="Edit bookmark")
 
 
-@app.route('/delete/<int:bookmark_id>', methods=['GET', 'POST'])
+@app.route("/delete/<int:bookmark_id>", methods=["GET", "POST"])
 @login_required
 def delete_bookmark(bookmark_id):
     bookmark = Bookmark.query.get_or_404(bookmark_id)
@@ -58,16 +58,16 @@ def delete_bookmark(bookmark_id):
         db.session.delete(bookmark)
         db.session.commit()
         flash("Deleted '{}'".format(bookmark.description))
-        return redirect(url_for('user', username=current_user.username))
+        return redirect(url_for("user", username=current_user.username))
     else:
         flash("Please confirm deleting the bookmark.")
-    return render_template('confirm_delete.html', bookmark=bookmark, nolinks=True)
+    return render_template("confirm_delete.html", bookmark=bookmark, nolinks=True)
 
 
-@app.route('/user/<username>')
+@app.route("/user/<username>")
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+    return render_template("user.html", user=user)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -78,51 +78,54 @@ def login():
         if user is not None and user.check_password(form.password.data):
             login_user(user, form.remember_me.data)
             flash("Logged in successfully as {}.".format(user.username))
-            return redirect(request.args.get('next') or url_for('user',
-                                                                username=user.username))
-        flash('Incorrect username or password.')
+            return redirect(
+                request.args.get("next") or url_for("user", username=user.username)
+            )
+        flash("Incorrect username or password.")
     return render_template("login.html", form=form)
 
 
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for("index"))
 
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data,
-                    username=form.username.data,
-                    password=form.password.data)
+        user = User(
+            email=form.email.data,
+            username=form.username.data,
+            password=form.password.data,
+        )
         db.session.add(user)
         db.session.commit()
-        flash('Welcome, {}! Please login.'.format(user.username))
-        return redirect(url_for('login'))
+        flash("Welcome, {}! Please login.".format(user.username))
+        return redirect(url_for("login"))
     return render_template("signup.html", form=form)
 
 
-@app.route('/tag/<name>')
+@app.route("/tag/<name>")
 def tag(name):
     tag = Tag.query.filter_by(name=name).first_or_404()
-    return render_template('tag.html', tag=tag)
+    return render_template("tag.html", tag=tag)
 
 
 @app.errorhandler(403)
 def forbidden(e):
-    return render_template('403.html'), 403
+    return render_template("403.html"), 403
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template("404.html"), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html'), 500
+    return render_template("500.html"), 500
 
 
 @app.context_processor
