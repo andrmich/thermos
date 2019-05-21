@@ -23,7 +23,7 @@ db = SQLAlchemy(app)
 # Configure authentication
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
-login_manager.login_view = "login"
+login_manager.login_view = "auth.login"
 login_manager.init_app(app)
 
 # enable debugtoolbar
@@ -32,5 +32,9 @@ toolbar = DebugToolbarExtension(app)
 # for displaying timestamps
 moment = Moment(app)
 
+from thermos.auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
 import thermos.models
 import thermos.views
+
