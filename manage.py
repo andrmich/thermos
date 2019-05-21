@@ -2,11 +2,11 @@
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, prompt_bool
 
-from thermos import app, db
+from thermos import bookmarks, db
 from thermos.models import User, Bookmark, Tag
 
-manager = Manager(app)
-migrate = Migrate(app, db)
+manager = Manager(bookmarks)
+migrate = Migrate(bookmarks, db)
 
 manager.add_command("db", MigrateCommand)
 

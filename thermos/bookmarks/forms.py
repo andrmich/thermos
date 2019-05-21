@@ -1,17 +1,11 @@
 from flask_wtf import Form
-from wtforms.fields import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.fields import StringField
 from wtforms.fields.html5 import URLField
 from wtforms.validators import (
     DataRequired,
-    Length,
-    Email,
     Regexp,
-    EqualTo,
     url,
-    ValidationError,
 )
-
-from thermos.models import User
 
 
 class BookmarkForm(Form):
@@ -28,7 +22,7 @@ class BookmarkForm(Form):
 
     def validate(self):
         if not self.url.data.startswith("http://") or self.url.data.startswith(
-            "https://"
+                "https://"
         ):
             self.url.data = "http://" + self.url.data
 
