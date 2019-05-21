@@ -13,14 +13,14 @@ Thermos -- Welcome
         </header>
 
         <section>
-            <h2>Recently Added</h2>
-                {% if new_bookmarks.count() > 0 %}
-                  {% with bookmarks=new_bookmarks %}
+            <h2>Recently added</h2>
+            {% if new_bookmarks.count() > 0 %}
+                {% with bookmarks=new_bookmarks %}
                     {% include "bookmark_list.html" %}
-                  {% endwith %}
-                {% else %}
-                    No bookmarks yet.
-                {% endif %}
+                {% endwith %}
+            {% else %}
+                No bookmarks have been added yet.
+            {% endif %}
         </section>
     </article>
 {% endblock %}
